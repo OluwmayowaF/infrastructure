@@ -1,0 +1,59 @@
+# Configure global settings in this section.
+global:
+  name: consul-dc2
+  datacenter: dc2
+  #FOR MSGW
+  federation:
+    enabled: true
+  tls:
+    enabled: true
+    caCert:
+      secretName: consul-federation
+      secretKey: caCert
+    caKey:
+      secretName: consul-federation
+      secretKey: caKey
+  # #Enable ACL
+  acls:
+    manageSystemACLs: false
+    replicationToken:
+      secretName: consul-federation
+      secretKey: replicationToken
+  # #Gossip encryption ACL
+  gossipEncryption:
+    autoGenerate: false
+    secretName: consul-federation
+    secretKey: gossipEncryptionKey
+server:
+  replicas: 1
+  #FOR MSG
+  extraConfig: |
+    {
+      "primary_datacenter": "dc1",
+      "primary_gateways": ["34.83.249.37:8443"]
+    }
+#Enable UI
+ui:
+  enabled: true
+#Enable controller
+controller:
+  enabled: true
+  replicas: 1
+#Enable Consul connect pod injection
+connectInject:
+  enabled: true
+  default: true
+#MGW
+meshGateway:
+  enabled: true
+  replicas: 1
+# hostNetwork: true
+# dnsPolicy: ClusterFirstWithHostNet
+#Enable Sync Catalop
+syncCatalog:
+  enabled: true
+  toConsul: true
+  toK8S: false
+  default: true
+  k8sAllowNamespaces: ['argocd']
+  k8sDenyNamespaces: ['kube-system', 'kube-public']
